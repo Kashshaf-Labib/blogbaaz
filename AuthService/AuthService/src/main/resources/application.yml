@@ -1,0 +1,18 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: AUTH-SERVICE
+  cloud:
+    config:
+      uri: http://localhost:8888
+  config:
+    import: optional:configserver:http://localhost:8083
+
+jwt:
+  secret: mysecretkey123456789mysecretkey123456789mysecretkey123456789mysecretkey123456789mysecretkey123456789
+  expiration: 86400000 # 24 hours in milliseconds
+
+user-service:
+  url: http://localhost:8082
