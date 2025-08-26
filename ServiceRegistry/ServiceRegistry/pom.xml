@@ -12,7 +12,7 @@
 	<artifactId>ServiceRegistry</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ServiceRegistry</name>
-	<description>Service Registry Microservice for Classmate</description>
+	<description>Service Registry Microservice for Blogbaaz</description>
 	<url/>
 	<licenses>
 		<license/>
