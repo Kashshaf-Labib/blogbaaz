@@ -1,0 +1,30 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    config:
+      uri: http://localhost:8083
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - name: JwtAuthenticationFilter
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth/**
+
+  config:
+    import: optional:configserver:http://localhost:8083
+
+jwt:
+  secret: mysecretkey123456789mysecretkey123456789mysecretkey123456789mysecretkey123456789mysecretkey123456789

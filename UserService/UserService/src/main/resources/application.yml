@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/classmate_userservice
+    url: jdbc:postgresql://localhost:5432/blogbaaz_userservice
     username: postgres
     password: postgre
   jpa:
