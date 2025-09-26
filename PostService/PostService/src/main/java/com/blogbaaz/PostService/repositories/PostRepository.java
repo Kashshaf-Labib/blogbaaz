@@ -20,7 +20,8 @@ public interface PostRepository extends JpaRepository<Post, String> {
 
     Page<Post> findByStatus(Post.PostStatus status, Pageable pageable);
 
-    Page<Post> findByCategoryId(String categoryId, Pageable pageable);
+    @Query("SELECT p FROM Post p WHERE p.category.categoryId = :categoryId")
+    Page<Post> findByCategoryId(@Param("categoryId") String categoryId, Pageable pageable);
 
     Page<Post> findByTagsContaining(String tag, Pageable pageable);
 
