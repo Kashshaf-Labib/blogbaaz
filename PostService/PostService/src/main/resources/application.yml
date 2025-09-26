@@ -27,3 +27,6 @@ eureka:
     fetch-registry: true
   instance:
     prefer-ip-address: true
+
+jwt:
+  secret: mysecretkey123456789mysecretkey123456789mysecretkey123456789mysecretkey123456789mysecretkey123456789

@@ -29,9 +29,7 @@ public class CreatePostRequest {
 
     private Set<String> tags;
 
-    private String categoryId;
+    private String category;
 
     private String featuredImage;
-
-    private boolean isFeatured;
 }

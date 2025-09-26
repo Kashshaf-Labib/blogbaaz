@@ -17,8 +17,7 @@ public class UpdatePostRequest {
     private String content;
     private String excerpt;
     private Set<String> tags;
-    private String categoryId;
+    private String category;
     private String featuredImage;
-    private boolean isFeatured;
     private String status;
 }

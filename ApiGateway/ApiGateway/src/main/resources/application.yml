@@ -22,6 +22,14 @@ spring:
           uri: lb://AUTH-SERVICE
           predicates:
             - Path=/api/auth/**
+        - id: post-service
+          uri: lb://POST-SERVICE
+          predicates:
+            - Path=/api/posts/**
+        - id: search-service
+          uri: lb://SEARCH-SERVICE
+          predicates:
+            - Path=/api/search/**
 
   config:
     import: optional:configserver:http://localhost:8083

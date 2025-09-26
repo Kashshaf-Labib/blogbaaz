@@ -46,9 +46,8 @@ public class Post {
     @Column(name = "tag")
     private Set<String> tags = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Column(length = 100)
+    private String category;
 
     @Column(nullable = false)
     private String slug;
@@ -58,9 +57,6 @@ public class Post {
 
     @Column(nullable = false)
     private boolean isPublished = false;
-
-    @Column(nullable = false)
-    private boolean isFeatured = false;
 
     @Column(nullable = false)
     private int viewCount = 0;

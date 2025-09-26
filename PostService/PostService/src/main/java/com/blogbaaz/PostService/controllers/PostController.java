@@ -32,7 +32,6 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<PostDto> getPostById(@PathVariable String postId) {
         PostDto post = postService.getPostById(postId);
-        // Increment view count when post is viewed
         postService.incrementViewCount(postId);
         return ResponseEntity.ok(post);
     }
@@ -40,11 +39,11 @@ public class PostController {
     @GetMapping("/slug/{slug}")
     public ResponseEntity<PostDto> getPostBySlug(@PathVariable String slug) {
         PostDto post = postService.getPostBySlug(slug);
-        // Increment view count when post is viewed
         postService.incrementViewCount(post.getPostId());
         return ResponseEntity.ok(post);
     }
 
+    // Paginated endpoints
     @GetMapping
     public ResponseEntity<Page<PostDto>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
@@ -54,14 +53,13 @@ public class PostController {
 
         Sort sort = sortDir.equalsIgnoreCase("desc") ?
                 Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<PostDto> posts = postService.getAllPosts(pageable);
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/author/{authorId}")
-    public ResponseEntity<Page<PostDto>> getPostsByAuthor(
+    @GetMapping("/paginated/author/{authorId}")
+    public ResponseEntity<Page<PostDto>> getPostsByAuthorPaginated(
             @PathVariable String authorId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -71,8 +69,19 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/published")
-    public ResponseEntity<Page<PostDto>> getPublishedPosts(
+    @GetMapping("/paginated/category/{category}")
+    public ResponseEntity<Page<PostDto>> getPostsByCategoryPaginated(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<PostDto> posts = postService.getPostsByCategory(category, pageable);
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/paginated/published")
+    public ResponseEntity<Page<PostDto>> getPublishedPostsPaginated(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
@@ -81,34 +90,72 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<Page<PostDto>> getPostsByCategory(
-            @PathVariable String categoryId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<PostDto> posts = postService.getPostsByCategory(categoryId, pageable);
-        return ResponseEntity.ok(posts);
-    }
-
+    // List endpoints (for SearchService)
     @GetMapping("/search")
-    public ResponseEntity<Page<PostDto>> searchPosts(
+    public ResponseEntity<List<PostDto>> searchPosts(
             @RequestParam String keyword,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<PostDto> posts = postService.searchPosts(keyword, pageable);
+        Sort sort = sortDir.equalsIgnoreCase("desc") 
+            ? Sort.by(sortBy).descending() 
+            : Sort.by(sortBy).ascending();
+        List<PostDto> posts = postService.searchPosts(keyword, sort);
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/featured")
-    public ResponseEntity<List<PostDto>> getFeaturedPosts() {
-        List<PostDto> posts = postService.getFeaturedPosts();
+    @GetMapping("/author/{authorId}")
+    public ResponseEntity<List<PostDto>> getPostsByAuthor(
+            @PathVariable String authorId,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") 
+            ? Sort.by(sortBy).descending() 
+            : Sort.by(sortBy).ascending();
+        List<PostDto> posts = postService.getPostsByAuthor(authorId, sort);
         return ResponseEntity.ok(posts);
     }
 
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<PostDto>> getPostsByCategory(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") 
+            ? Sort.by(sortBy).descending() 
+            : Sort.by(sortBy).ascending();
+        List<PostDto> posts = postService.getPostsByCategory(category, sort);
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/tags")
+    public ResponseEntity<List<PostDto>> getPostsByTags(
+            @RequestParam String[] tags,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") 
+            ? Sort.by(sortBy).descending() 
+            : Sort.by(sortBy).ascending();
+        List<PostDto> posts = postService.getPostsByTags(tags, sort);
+        return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/published")
+    public ResponseEntity<List<PostDto>> getPublishedPosts(
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") 
+            ? Sort.by(sortBy).descending() 
+            : Sort.by(sortBy).ascending();
+        List<PostDto> posts = postService.getPublishedPosts(sort);
+        return ResponseEntity.ok(posts);
+    }
+
+    // Update operations
     @PutMapping("/{postId}")
     public ResponseEntity<PostDto> updatePost(
             @PathVariable String postId,
