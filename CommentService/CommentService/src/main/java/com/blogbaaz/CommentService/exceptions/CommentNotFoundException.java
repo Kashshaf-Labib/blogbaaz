@@ -1,0 +1,8 @@
+package com.blogbaaz.CommentService.exceptions;
+
+public class CommentNotFoundException extends RuntimeException {
+    public CommentNotFoundException(String message) {
+        super(message);
+    }
+}
+
