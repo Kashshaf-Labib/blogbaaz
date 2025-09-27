@@ -30,6 +30,12 @@ spring:
           uri: lb://SEARCH-SERVICE
           predicates:
             - Path=/api/search/**
+        - id: comment-service
+          uri: lb://COMMENT-SERVICE
+          predicates:
+            - Path=/api/comments/**
+          filters:
+            - name: JwtAuthenticationFilter
 
   config:
     import: optional:configserver:http://localhost:8083

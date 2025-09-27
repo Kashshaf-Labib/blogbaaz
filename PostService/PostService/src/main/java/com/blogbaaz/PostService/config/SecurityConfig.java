@@ -29,6 +29,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/posts/category/**").permitAll()
                         .requestMatchers("/api/posts/paginated/category/**").permitAll()
                         .requestMatchers("/api/posts/tags").permitAll()
+                        .requestMatchers("/api/posts/author/**").permitAll() // Make author endpoints public
+                        .requestMatchers("/api/posts/paginated/author/**").permitAll() // Make paginated author endpoints public
                         .requestMatchers("/api/posts/{postId}").permitAll()
                         .requestMatchers("/api/posts/slug/**").permitAll()
                         .requestMatchers("/api/posts").permitAll() // GET all posts
@@ -40,8 +42,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/posts/{postId}/publish").authenticated() // Publish post
                         .requestMatchers("/api/posts/{postId}/archive").authenticated() // Archive post
                         .requestMatchers("/api/posts/{postId}/like").authenticated() // Like post
-                        .requestMatchers("/api/posts/author/**").authenticated() // Author posts
-                        .requestMatchers("/api/posts/paginated/author/**").authenticated() // Author posts paginated
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
